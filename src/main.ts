@@ -45,47 +45,19 @@ console.log('Массив товаров из каталога: ', productsModel
     
 // для проверки класса CartModels
 
-      const cartModel = new CartModel();
-
-    if (allProducts.length >= 3) {
-        cartModel.addItem(allProducts[0]);
-        cartModel.addItem(allProducts[1]);
-        cartModel.addItem(allProducts[2]);
-        
-        const cartItems = cartModel.getItems();
-        console.log('Товары в корзине:', cartItems);
-        console.log('Количество товаров в корзине:', cartModel.getItemsCount());
-        
-        console.log('Общая стоимость корзины:', cartModel.getTotalAmount());
-        
-        const firstProductId = allProducts[0].id;
-        console.log('Содержит товар', firstProductId, ':', cartModel.containsItem(firstProductId));
-        
-        cartModel.removeItem(firstProductId);
-        console.log('После удаления товара', firstProductId, ':');
-        console.log('Количество товаров:', cartModel.getItemsCount());
-        console.log('Содержит удаленный товар:', cartModel.containsItem(firstProductId));
-        
-        cartModel.clear();
-        console.log('После очистки корзины:');
-        console.log('Количество товаров:', cartModel.getItemsCount());
-        console.log('Общая стоимость:', cartModel.getTotalAmount());
-    }
-
-
 
     //для проверки Api
 
+// создаём экземпляр Api, который реализует IApi
+const api = new Api(API_URL);
 const shopApi = new ShopApi(api);
-const serverProductModel = new ProductModel();
+const catalogModel = new Products(); // Создаём новый экземпляр
 
 shopApi.getProducts()
-    .then(products => {
-        console.log('Получено товаров с сервера:', products.length);
-        
-        serverProductModel.saveProducts(products);
-        
-        const savedProducts = serverProductModel.getProducts();
-        console.log('Товаров сохранено в модель:', savedProducts.length);
-        console.log('Каталог из модели:', savedProducts);
-    })
+  .then((items) => {
+    console.log("Товары получены с сервера", items);
+    catalogModel.setItems(items); // Используем метод setItems
+  })
+  .catch((error) => {
+    console.error("Ошибка", error);
+  });

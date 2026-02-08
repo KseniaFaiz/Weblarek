@@ -286,18 +286,15 @@ constructor(api: IApi)
 
 В файле `types/index.ts` добавлены следующие типы:
 
-```typescript
-/**
- * Тип для ответа сервера с товарами
- */
+// Тип для ответа сервера с товарами
+ 
 export interface IProductsResponse {
   items: IProduct[];
   total: number;
 }
 
-/**
- * Данные для создания заказа
- */
+//Данные для создания заказа
+
 export interface IOrderData {
   payment: TPayment;    // Способ оплаты
   email: string;        // Электронная почта
@@ -307,14 +304,13 @@ export interface IOrderData {
   items: string[];      // Массив идентификаторов товаров
 }
 
-/**
- * Ответ сервера на создание заказа
- */
+//Ответ сервера на создание заказа
+
 export interface IOrderResponse {
   id: string;           // Идентификатор заказа
   total: number;        // Общая сумма заказа
 }
-```
+
 
 
 
