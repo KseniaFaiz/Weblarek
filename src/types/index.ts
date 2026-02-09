@@ -15,7 +15,7 @@ export interface IProduct {
 } 
 
 export interface IBuyer {
-  payment: TPayment;
+  payment: any;
   email: string;
   phone: string;
   address: string;
@@ -27,7 +27,7 @@ export interface IProductsResponse {
 }
 
 export interface IOrderData {
-  payment: TPayment;
+  payment: any;
   email: string;
   phone: string;
   address: string;
@@ -40,3 +40,9 @@ export interface IOrderResponse {
   total: number;
 }
 
+export interface IBuyerValidationErrors {
+  payment?: any;
+  email?: string;
+  phone?: string;
+  address?: string;
+}

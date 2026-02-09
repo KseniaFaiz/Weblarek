@@ -1,53 +1,59 @@
 import { IBuyer, IBuyerValidationErrors } from '../../types';
 
-export class BuyerModel {
-    _data: IBuyer = {
-        payment: 'online',
-        email: '',
-        phone: '',
-        address: ''
-    };
+export class BuyerModel implements IBuyer {
+    payment: any;
+    email: string;
+    phone: string;
+    address: string;
+
 
     constructor(initialData: Partial<IBuyer> = {}) {
-        this._data = { ...this._data, ...initialData };
+        this.payment = initialData.payment;
+        this.email = initialData.email || '';
+        this.phone = initialData.phone || '';
+        this.address = initialData.address || '';
     }
 
-    saveData(data: Partial<IBuyer>): void {
-        this._data = { ...this._data, ...data };
+    saveData(initialData: Partial<IBuyer>): void {
+        this.payment = initialData.payment;
+        this.email = initialData.email || '';
+        this.phone = initialData.phone || '';
+        this.address = initialData.address || '';
     }
 
     getData(): IBuyer {
-        return this._data;
+        return this;
     }
 
     clear(): void {
-        this._data = {
-            payment: 'online',
+        Object.assign(this, {
+            payment: '',
             email: '',
             phone: '',
             address: ''
-        };
+        })
+
     }
 
     validate(): IBuyerValidationErrors {
         const errors: IBuyerValidationErrors = {};
-        
-        if (!this._data.payment) {
+
+        if (!this.payment) {
             errors.payment = 'Выберите оплаты';
         }
-        
-        if (!this._data.email) {
+
+        if (!this.email) {
             errors.email = 'Укажите Email';
         }
-        
-        if (!this._data.phone) {
+
+        if (!this.phone) {
             errors.phone = 'Укажите номер телефона';
         }
-        
-        if (!this._data.address) {
+
+        if (!this.address) {
             errors.address = 'Укажите адрес доставки';
         }
-        
+
         return errors;
     }
 }
