@@ -1,30 +1,29 @@
 import { IProduct } from '../../types';
 
 export class ProductModel {
-    private _products: IProduct[] = [];
-    private _selectedProduct: IProduct | null = null;
+    private products: IProduct[] = [];
+    private selectedProduct: IProduct | null = null;
 
-    constructor(initialProducts: IProduct[] = []) {
-        this._products = initialProducts;
+    constructor() {
     }
 
     saveProducts(products: IProduct[]): void {
-        this._products = products;
+        this.products = products;
     }
 
     getProducts(): IProduct[] {
-        return this._products;
+        return this.products;
     }
 
     getProductById(id: string): IProduct | null {
-        return this._products.find(product => product.id === id) || null;
+        return this.products.find(product => product.id === id) || null;
     }
 
     saveSelectedProduct(product: IProduct): void {
-        this._selectedProduct = product;
+        this.selectedProduct = product;
     }
 
     getSelectedProduct(): IProduct | null {
-        return this._selectedProduct;
+        return this.selectedProduct;
     }
 }

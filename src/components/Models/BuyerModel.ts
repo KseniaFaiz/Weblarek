@@ -1,38 +1,42 @@
-import { IBuyer, IBuyerValidationErrors } from '../../types';
+import { IBuyer, IBuyerValidationErrors, Payment } from '../../types';
 
-export class BuyerModel implements IBuyer {
-    payment: any;
-    email: string;
-    phone: string;
-    address: string;
+export class BuyerModel {
+    private payment: Payment = '';
+    private email: string = '';
+    private phone: string = ''
+    private address: string = '';
 
-
-    constructor(initialData: Partial<IBuyer> = {}) {
-        this.payment = initialData.payment;
-        this.email = initialData.email || '';
-        this.phone = initialData.phone || '';
-        this.address = initialData.address || '';
+    constructor() {
     }
 
-    saveData(initialData: Partial<IBuyer>): void {
-        this.payment = initialData.payment;
-        this.email = initialData.email || '';
-        this.phone = initialData.phone || '';
-        this.address = initialData.address || '';
+    saveData(data: Partial<IBuyer>): void {
+        if (data.payment !== undefined) {
+            this.payment = data.payment;
+        }
+        if (data.email !== undefined) {
+            this.email = data.email;
+        }
+        if (data.phone !== undefined) {
+            this.phone = data.phone;
+        }
+        if (data.address !== undefined) {
+            this.address = data.address;
+        }
     }
 
     getData(): IBuyer {
-        return this;
+        return {
+            payment: this.payment,
+            email: this.email,
+            phone: this.phone,
+            address: this.address,
+        };
     }
-
     clear(): void {
-        Object.assign(this, {
-            payment: '',
-            email: '',
-            phone: '',
-            address: ''
-        })
-
+        this.payment = '';
+        this.email = '';
+        this.phone = '';
+        this.address = '';
     }
 
     validate(): IBuyerValidationErrors {
