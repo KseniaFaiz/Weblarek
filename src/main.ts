@@ -74,3 +74,4 @@ shopApi.getProducts()
     .catch((error) => {
         console.error("Ошибка", error);
     });
+

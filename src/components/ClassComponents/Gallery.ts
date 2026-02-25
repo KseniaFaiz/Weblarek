@@ -22,3 +22,5 @@ export class Gallery extends Component<IGallery> {
         });
     }
 }
+
+
