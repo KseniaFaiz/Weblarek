@@ -55,43 +55,10 @@ export interface TPayment {
 
 
 
-export interface IModal {
-  modalElement: HTMLElement;
-  modalButtonClose: HTMLButtonElement;
-}
-
-export interface ISuccess {
-  successElement: HTMLElement;
-  successButton: HTMLButtonElement;
-}
-
-export interface IBasket {
-  basketasketList: HTMLElement;
-  basketPrice: HTMLElement;
-  basketButton: HTMLButtonElement;
-}
-
-export interface IForm {
-  formOrder: HTMLElement;
-  formContact: HTMLElement;
-}
 
 
-export interface ICardCatalogElement {
-  imageElement: HTMLImageElement;
-  categoryElement: HTMLElement;
-      buttonElement: HTMLButtonElement;
-}
 
-export interface ICardPreviewElement {
-  imageElement: HTMLImageElement;
-  textElement: HTMLElement;
-  categoryElement: HTMLElement;
-}
 
-export interface ICardBasketElement {
-  indexElement: HTMLElement;
-}
 
 
 
