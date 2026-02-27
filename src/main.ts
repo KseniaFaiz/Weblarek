@@ -87,6 +87,7 @@ events.on('basket:open', () => {
         cardBasket.id = item.id
         return cardBasket.render(item)
     });
+    basket.total= cart.getTotalAmount()
 
     modal.content = basket.render()
     modal.open();
