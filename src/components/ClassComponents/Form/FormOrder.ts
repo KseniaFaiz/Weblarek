@@ -41,7 +41,7 @@ export class FormOrder extends Form {
             this.events.emit('buyer:change', { payment: 'cash' });
         });
 
-        this.addressInput.addEventListener('input', () => {
+        this.addressInput.addEventListener('change', () => {
             this.events.emit('buyer:change', { address: this.addressInput.value });
         });
     };

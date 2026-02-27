@@ -127,11 +127,22 @@ events.on('basket:render', () => {
 });
 
 events.on('cart:order', () => {
-    // const buyerData = buyer.getData();
-    // console.log('bayer', buyerData)
+    events.emit('order-form:open')
+    // const orderForm = new FormOrder(cloneTemplate(formOrderTemplate), events);
+
+
+    // modal.content = orderForm.render()
+
+
+    // modal.open();
+});
+
+events.on('order-form:open', () => {
+    const buyerData = buyer.getData();
+    console.log('bayer', buyerData)
     const orderForm = new FormOrder(cloneTemplate(formOrderTemplate), events);
-    // orderForm.payment = buyerData?.payment ?? 'card';
-    // orderForm.address = buyerData?.address ?? '';
+    orderForm.payment = buyerData?.payment ?? 'card';
+    orderForm.address = buyerData?.address ?? '';
 
     // const addressErrors = buyer.validate();
     // orderForm.isAddressValid(addressErrors);
@@ -142,6 +153,10 @@ events.on('cart:order', () => {
     modal.open();
 });
 
+events.on('buyer:change', (buyerData: IBuyer) => {
+    buyer.saveData(buyerData)
+    events.emit('order-form:open')
+});
 
 
 
@@ -216,15 +231,6 @@ events.on('cart:open', () => {
     modal.open();
 });
 
-events.on('buyer:change', (data: Partial<IBuyer>) => {
-    buyer.saveData(data);
-});
-
-events.on('buyer:changed', (buyerData: IBuyer) => {
-    const payment: Payment = buyerData.payment ?? 'card';
-
-    orderForm.payment = payment;
-});
 
 
 
