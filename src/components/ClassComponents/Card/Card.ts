@@ -1,9 +1,9 @@
 import { ensureElement } from "../../../utils/utils";
 import { Component } from "../../base/Component";
-
+import { IEvents } from "../../base/Events";
 export interface ICard {
     title: string;
-    price: number;
+    price: number | null;
     id?: string;
 }
 
@@ -12,8 +12,8 @@ export class Card<T extends ICard> extends Component<T> {
     protected priceElement: HTMLElement;
     protected id?: string;
 
-    constructor(container: HTMLElement) {
-        super(container);
+    constructor(container: HTMLElement, events: IEvents) {
+        super(container, events);
         this.titleElement = ensureElement<HTMLElement>(
             '.card__title',
             this.container

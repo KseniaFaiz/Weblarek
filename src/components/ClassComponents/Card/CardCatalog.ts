@@ -19,15 +19,18 @@ export interface ICardPreviewElement {
 
 type CategoryKey = keyof typeof categoryMap;
 // export type TCardCatalog = Pick<IProduct, 'image' | 'category'>;
-export type TCardCatalog = Pick<IProduct, 'id' | 'title' | 'image' | 'category'>;
+export type TCardCatalog = Pick<
+    IProduct,
+    'id' | 'title' | 'price' | 'image' | 'category'
+>;
 
 export class CardCatalog extends Card<TCardCatalog> {
     protected imageElement: HTMLImageElement;
     protected categoryElement: HTMLElement;
 
     // constructor(container: HTMLElement, actions?: ICardActions) {
-    constructor(container: HTMLElement, protected events: IEvents) {
-        super(container);
+    constructor(container: HTMLElement, events: IEvents) {
+        super(container, events);
         this.categoryElement = ensureElement<HTMLElement>(
             '.card__category',
             this.container

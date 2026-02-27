@@ -22,7 +22,7 @@ import { IProductsResponse, IBuyer } from './types';
 import { FormOrder } from './components/ClassComponents/Form/FormOrder.ts';
 import { FormContacts } from './components/ClassComponents/Form/FormContact.ts';
 import { Success } from './components/ClassComponents/Success.ts';
-
+import { Payment } from './types';
 
 
 const events = new EventEmitter();
@@ -38,30 +38,37 @@ const header = new Header(
 const gallery = new Gallery(
     ensureElement<HTMLElement>('.page__wrapper'),
     events);
-const modal = new Modal(
-    document.querySelector('.modal') as HTMLElement,
-    events
-);
-const success = new Success(
-    document.querySelector('.order-success') as HTMLElement,
-    events,
-    {
-        onOrdered: () => console.log('Заказ закрыт')
-    }
-);
+// const modal = new Modal(
+//     document.querySelector('.modal') as HTMLElement,
+//     events
+// );
+
+
+// const success = new Success(
+//     document.querySelector('.order-success') as HTMLElement,
+//     events,
+//     {
+//         onOrdered: () => console.log('Заказ закрыт')
+//     }
+// );
 const cardCatalogTemplate = ensureElement<HTMLTemplateElement>('#card-catalog');
 const cardPreviewTemplate = ensureElement<HTMLTemplateElement>('#card-preview');
-const basketTemplate = ensureElement<HTMLTemplateElement>('#basket');
+// const basketTemplate = ensureElement<HTMLTemplateElement>('#basket');
 const cardBasketTemplate = ensureElement<HTMLTemplateElement>('#card-basket');
 const formOrderTemplate = ensureElement<HTMLTemplateElement>('#order');
 const formContactsTemplate = ensureElement<HTMLTemplateElement>('#contacts');
 const successTemplate = ensureElement<HTMLTemplateElement>('#success');
+const modalContainer = ensureElement<HTMLDivElement>('#modal-container');
+const modal = new Modal(modalContainer, events);
+
 
 
 const cardPreview = new CardPreview(
     cloneTemplate(cardPreviewTemplate), events);
 const basket = new Basket(
-    cloneTemplate(basketTemplate), events);
+    cloneTemplate<HTMLElement>(cardBasketTemplate),
+    events)
+
 const orderForm = new FormOrder(
     cloneTemplate(formOrderTemplate), events);
 const contactsForm = new FormContacts(
@@ -75,6 +82,7 @@ const successView = new Success(
         }
     }
 );
+
 
 
 events.on('catalog:changed', () => {
@@ -110,7 +118,7 @@ events.on('card:add-product', (event: { id: string }) => {
         return;
     }
 
-    cart.addProductToCart(product);
+    cart.addItem(product);
 });
 
 events.on('card:remove-product', (event: { id: string }) => {
@@ -119,11 +127,11 @@ events.on('card:remove-product', (event: { id: string }) => {
         return;
     }
 
-    cart.removeProductFromCart(product);
+    cart.removeItem(product.id);
 });
 
 events.on('basket:change', () => {
-    const basketList = cart.getCartProducts();
+    const basketList = cart.getItems();
 
     const basketItems = basketList.map((item, index) => {
         const basketProduct = new CardBasket(cloneTemplate(cardBasketTemplate), events);
@@ -135,8 +143,8 @@ events.on('basket:change', () => {
         return basketProduct.render(item);
     });
     basket.basket = basketItems;
-    basket.total = cart.getTotalCartPrice();
-    header.counter = cart.getTotalCartProducts();
+    basket.total = cart.getTotalAmount();
+    header.counter = cart.getTotalAmount();
 });
 
 events.on('cart:open', () => {
@@ -145,20 +153,22 @@ events.on('cart:open', () => {
 });
 
 events.on('buyer:change', (data: Partial<IBuyer>) => {
-    buyer.setBuyerData(data);
+    buyer.saveData(data);
 });
 
-events.on('buyer:changed', () => {
-    const buyerData = buyer.getBuyerData();
-})
+events.on('buyer:changed', (buyerData: IBuyer) => {
+    const payment: Payment = buyerData.payment ?? 'card';
+
+    orderForm.payment = payment;
+});
 
 events.on('cart:order', () => {
-    const buyerData = buyer.getBuyerData();
+    const buyerData = buyer.getData();
 
     orderForm.payment = buyerData?.payment ?? 'card';
     orderForm.address = buyerData?.address ?? '';
 
-    const addressErrors = buyer.sumAddressErrors();
+    const addressErrors = buyer.validate();
     orderForm.isAddressValid(addressErrors);
 
     modal.render({ content: orderForm.render() });
@@ -171,30 +181,30 @@ events.on('order:submit', () => {
 });
 
 events.on('cart:contacts', () => {
-    const buyerData = buyer.getBuyerData();
+    const buyerData = buyer.getData();
 
     contactsForm.email = buyerData?.email ?? '';
     contactsForm.phone = buyerData?.phone ?? '';
-    contactsForm.isContactsValid(buyer.sumContactsErrors());
+    contactsForm.isContactsValid(buyer.validate());
 
     modal.render({ content: contactsForm.render() });
     modal.open();
 });
 
 events.on('contacts:submit', async () => {
-    const buyerData = buyer.getBuyerData();
+    const buyerData = buyer.getData();
 
     if (!buyerData) {
         return;
     }
 
     const orderData: IProductsResponse = {
-        payment: buyerData.payment,
+        payment: buyerData.payment ?? 'card',
         email: buyerData.email,
         phone: buyerData.phone,
         address: buyerData.address,
-        total: cart.getTotalCartPrice(),
-        items: cart.getCartProducts().map((p) => p.id),
+        total: cart.getTotalAmount(),
+        items: cart.getItems(),
     };
 
     try {
@@ -206,9 +216,9 @@ events.on('contacts:submit', async () => {
 });
 
 function cleanupAfterSuccess() {
-    cart.clearCart();
+    cart.clear();
     header.counter = cart.getTotalCartProducts();
-    buyer.clearBuyerData();
+    buyer.clear();
 }
 
 events.on('cart:success', (result: { total: number }) => {
@@ -225,7 +235,7 @@ api.getCatalog()
         { ...product, image: `${CDN_URL}/${product.image}`.replace('svg', 'png') }
     )))
     .then(productsWithImages => {
-        products.setProducts(productsWithImages);
+        products.saveProducts(productsWithImages);
     })
     .catch(error => console.error('Ошибка загрузки каталога', error));
 

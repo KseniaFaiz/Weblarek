@@ -3,17 +3,17 @@ import { Card } from "./Card";
 import { IEvents } from "../../base/Events";
 import { IProduct } from "../../../types";
 
-interface ICardBasketElement {
-    indexElement: HTMLElement;
-    buttonElement: HTMLButtonElement;
-}
+// interface ICardBasketElement {
+//     indexElement: HTMLElement;
+//     buttonElement: HTMLButtonElement;
+// }
 
-export class CardBasket extends Card<ICard> {
+export class CardBasket extends Card<any> {
     protected indexElement: HTMLElement;
     protected buttonElement: HTMLButtonElement;
 
-    constructor(protected events: IEvents, container: HTMLElement) {
-        super(container);
+    constructor(protected container: HTMLElement, events: IEvents,) {
+        super(container, events);
         this.indexElement = ensureElement<HTMLElement>(
             '.basket__item-index',
             this.container
@@ -31,12 +31,17 @@ export class CardBasket extends Card<ICard> {
         // })
     }
 
-    set index(value: string) {
+    set index(value: number) {
         this.indexElement.textContent = String(value);
     }
-    render(data: IProduct) {
-        this.id = data.id;
-        return super.render(data);
+    render(item: IProduct): HTMLElement {
+        // заполнение шаблона
+        return this.container;
     }
+    // render(data: IProduct) {
+    //     this.id = data.id;
+    //     return super.render(data);
+    // }
+
 
 }

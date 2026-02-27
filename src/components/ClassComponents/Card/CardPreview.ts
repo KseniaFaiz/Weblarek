@@ -13,8 +13,8 @@ export class CardPreview extends Card<ICard> {
     protected buttonElement: HTMLButtonElement;
     protected inBasket: boolean = false;
 
-    constructor(container: HTMLElement, protected events: IEvents) {
-        super(container);
+    constructor(container: HTMLElement, events: IEvents) {
+        super(container, events);
 
         this.imageElement = ensureElement<HTMLImageElement>(
             '.card__image',

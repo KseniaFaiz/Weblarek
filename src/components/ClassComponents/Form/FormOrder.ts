@@ -1,10 +1,10 @@
-import { TPayment } from "../../../types";
+import { Payment } from "../../../types";
 import { ensureElement } from "../../../utils/utils";
 import { Form } from "./Form";
 import { IEvents } from "../../base/Events";
 
 export interface IOrderData {
-    payment: TPayment;
+    payment: Payment;
     address: string;
 };
 
@@ -32,13 +32,12 @@ export class FormOrder extends Form {
         });
 
         this.payCard.addEventListener('click', () => {
-            this.payment = { payment: 'card' };
-
+            this.payment = 'card';
             this.events.emit('buyer:change', { payment: 'card' });
         });
 
         this.payCash.addEventListener('click', () => {
-            this.payment = { payment: 'cash' };
+            this.payment = 'cash';
             this.events.emit('buyer:change', { payment: 'cash' });
         });
 
@@ -47,20 +46,20 @@ export class FormOrder extends Form {
         });
     };
 
-selectPayment(payment: TPayment): void {
-    this.payCard.classList.toggle('button_alt-active', payment.payment === 'card');
-    this.payCash.classList.toggle('button_alt-active', payment.payment === 'cash');
+selectPayment(payment: Payment): void {
+    this.payCard.classList.toggle('button_alt-active', payment === 'card');
+    this.payCash.classList.toggle('button_alt-active', payment === 'cash');
 }
 
-    set payment(value: TPayment) {
+set payment(value: Payment) {
     this.selectPayment(value);
 }
 
-    get payment(): TPayment {
-        return {
-            payment: this.payCash.classList.contains('button_alt-active') ? 'cash' : 'card'
-        };
-    }
+get payment(): Payment {
+    return this.payCash.classList.contains('button_alt-active') ? 'cash' : 'card';
+}
+
+
 
     // set payment(value: TPayment) {
     //     this.selectPayment(value);

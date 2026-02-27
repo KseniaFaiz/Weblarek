@@ -32,9 +32,14 @@ export class CartModel {
         return this.items.length;
     }
 
+    getTotalCartProducts(): number {
+        return this.items.length;
+    }
+
     containsItem(itemId: string): boolean {
         return this.items.some(item => item.id === itemId);
     }
+
     isProductInCart(itemId: string): boolean {
         return this.containsItem(itemId);
     }

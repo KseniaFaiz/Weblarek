@@ -16,8 +16,9 @@ export class Success extends Component<ISuccess> {
     successElement: HTMLElement;
     successButtonClose: HTMLButtonElement;
     successDescription: HTMLElement;
+    total: number = 0;
 
-   constructor(container: HTMLElement, events: IEvents, actions?: ISuccessActions) {
+    constructor(container: HTMLElement, events: IEvents, actions?: ISuccessActions) {
         super(container, events);
         this.successElement = ensureElement<HTMLElement>(
             '.order-success',

@@ -1,12 +1,12 @@
-import { IBuyer, IBuyerValidationErrors, Payment } from '../../types';
+import { IBuyer, Payment } from '../../types';
 import { IEvents } from "../base/Events";
 export class BuyerModel {
-    private payment: Payment = '';
+    private payment: Payment | null = null;
     private email: string = '';
     private phone: string = ''
     private address: string = '';
 
-    constructor(protected events: IEvents){
+    constructor(protected events: IEvents) {
     }
 
     saveData(data: Partial<IBuyer>): void {
@@ -34,32 +34,41 @@ export class BuyerModel {
         };
     }
     clear(): void {
-        this.payment = '';
+        this.payment = null;
         this.email = '';
         this.phone = '';
         this.address = '';
         this.events.emit('buyer:cleared');
     }
 
-    validate(): IBuyerValidationErrors {
-        const errors: IBuyerValidationErrors = {};
+    validate(): { [key: string]: string } {
+        const errors = this.validate();
+        return {
+            email: errors.email ?? '',
+            phone: errors.phone ?? ''
+        };
 
-        if (!this.payment) {
-            errors.payment = 'Выберите оплаты';
-        }
 
-        if (!this.email) {
-            errors.email = 'Укажите Email';
-        }
+        // IBuyerValidationErrors {
+        //     const errors: IBuyerValidationErrors = {};
 
-        if (!this.phone) {
-            errors.phone = 'Укажите номер телефона';
-        }
+        //     if (!this.payment) {
+        //         errors.payment = 'Выберите оплаты';
+        //     }
 
-        if (!this.address) {
-            errors.address = 'Укажите адрес доставки';
-        }
+        //     if (!this.email) {
+        //         errors.email = 'Укажите Email';
+        //     }
 
-        return errors;
+        //     if (!this.phone) {
+        //         errors.phone = 'Укажите номер телефона';
+        //     }
+
+        //     if (!this.address) {
+        //         errors.address = 'Укажите адрес доставки';
+        //     }
+
+        //     return errors;
+        // }
     }
 }

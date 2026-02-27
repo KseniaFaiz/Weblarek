@@ -15,16 +15,19 @@ export interface IProduct {
 }
 
 export interface IBuyer {
-  // payment: 'card' | 'cash' | '' | undefined;
-  payment: Payment;
-  email: string | undefined;
-  phone: string | undefined;
-  address: string | undefined;
+  payment: Payment | null;
+  email: string;
+  phone: string;
+  address: string;
 }
 
 export interface IProductsResponse {
   items: IProduct[];
   total: number;
+  payment: Payment;
+  email: string;
+  phone: string;
+  address: string;
 }
 
 export interface IOrderData {
@@ -49,10 +52,9 @@ export interface IBuyerValidationErrors {
 }
 
 export type Payment = 'card' | 'cash' | '';
-export interface TPayment {
-  payment: Payment;
-}
-
+// export interface TPayment {
+//   payment: Payment;
+// }
 
 
 
