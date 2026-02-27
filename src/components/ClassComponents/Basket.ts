@@ -25,7 +25,7 @@ export class Basket extends Component<BasketData> {
     this.basket = [];
 
     this.buttonElement.addEventListener('click', () => {
-      this.events?.emit('cart:order');
+      this.events.emit('cart:order');
     });
   };
 

@@ -87,7 +87,7 @@ events.on('basket:open', () => {
         cardBasket.id = item.id
         return cardBasket.render(item)
     });
-    basket.total= cart.getTotalAmount()
+    basket.total = cart.getTotalAmount()
 
     modal.content = basket.render()
     modal.open();
@@ -126,6 +126,21 @@ events.on('basket:render', () => {
     header.counter = cart.getItemsCount();
 });
 
+events.on('cart:order', () => {
+    // const buyerData = buyer.getData();
+    // console.log('bayer', buyerData)
+    const orderForm = new FormOrder(cloneTemplate(formOrderTemplate), events);
+    // orderForm.payment = buyerData?.payment ?? 'card';
+    // orderForm.address = buyerData?.address ?? '';
+
+    // const addressErrors = buyer.validate();
+    // orderForm.isAddressValid(addressErrors);
+
+    modal.content = orderForm.render()
+
+
+    modal.open();
+});
 
 
 
@@ -141,7 +156,6 @@ events.on('basket:render', () => {
 
 
 
-// const orderForm = new FormOrder(cloneTemplate(formOrderTemplate), events);
 // const contactsForm = new FormContacts(cloneTemplate(formContactsTemplate), events);
 // const successView = new Success(cloneTemplate(successTemplate),
 //     events,
@@ -212,18 +226,7 @@ events.on('buyer:changed', (buyerData: IBuyer) => {
     orderForm.payment = payment;
 });
 
-events.on('cart:order', () => {
-    const buyerData = buyer.getData();
 
-    orderForm.payment = buyerData?.payment ?? 'card';
-    orderForm.address = buyerData?.address ?? '';
-
-    const addressErrors = buyer.validate();
-    orderForm.isAddressValid(addressErrors);
-
-    modal.render({ content: orderForm.render() });
-    modal.open();
-});
 
 events.on('order:submit', () => {
     modal.render({ content: contactsForm.render() });
