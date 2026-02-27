@@ -141,11 +141,11 @@ events.on('order-form:open', () => {
     const buyerData = buyer.getData();
     console.log('bayer', buyerData)
     const orderForm = new FormOrder(cloneTemplate(formOrderTemplate), events);
-    orderForm.payment = buyerData?.payment ?? 'card';
+    orderForm.payment = buyerData?.payment;
     orderForm.address = buyerData?.address ?? '';
 
-    // const addressErrors = buyer.validate();
-    // orderForm.isAddressValid(addressErrors);
+    const errors = buyer.validate();
+    orderForm.checkErrors(errors);
 
     modal.content = orderForm.render()
 

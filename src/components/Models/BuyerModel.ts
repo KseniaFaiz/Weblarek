@@ -42,11 +42,16 @@ export class BuyerModel {
     }
 
     validate(): { [key: string]: string } {
-        const errors = this.validate();
-        return {
-            email: errors.email ?? '',
-            phone: errors.phone ?? ''
-        };
+        const errors: { address?: string, payment?: string } = {}
+
+        if (!this.payment) {
+            errors.payment = 'Выберите способ оплаты';
+        } else
+            if (!this.address || this.address.trim() === '') {
+                errors.address = 'Необходимо указать адрес';
+            }
+        return errors;
+
 
 
         // IBuyerValidationErrors {
