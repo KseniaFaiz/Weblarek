@@ -70,7 +70,8 @@ const modal = new Modal(modalContainer, events);
 events.on('card:select', (event: { id: string }) => {
     products.setSelectedProduct(event.id);
     const cardPreview = new CardPreview(cloneTemplate(cardPreviewTemplate), events);
-    modal.content = cardPreview.render(products.getSelectedProduct())
+    const inBasket = cart.containsItem(event.id)
+    modal.content = cardPreview.render(products.getSelectedProduct(), inBasket)
     modal.open()
 });
 
@@ -82,7 +83,15 @@ events.on('basket:open', () => {
     modal.open();
 });
 
-
+events.on('card:add-product', (event: { id: string }) => {
+    const product = products.getProductById(event.id);
+    if (!product) {
+        return;
+    }
+    if (!cart.containsItem(event.id))
+        cart.addItem(product);
+    console.log('cart', cart.getItemsCount())
+});
 
 
 // const orderForm = new FormOrder(cloneTemplate(formOrderTemplate), events);
@@ -135,14 +144,7 @@ events.on('product:changed', (event: { id: string }) => {
     modal.open();
 });
 
-events.on('card:add-product', (event: { id: string }) => {
-    const product = products.getProductById(event.id);
-    if (!product) {
-        return;
-    }
 
-    cart.addItem(product);
-});
 
 events.on('card:remove-product', (event: { id: string }) => {
     const product = products.getProductById(event.id);
