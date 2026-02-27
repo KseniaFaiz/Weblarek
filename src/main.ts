@@ -32,13 +32,55 @@ const products = new ProductModel(events);
 const cart = new CartModel(events);
 const buyer = new BuyerModel(events);
 
+const header = new Header(ensureElement<HTMLElement>('.header'), events);
+const gallery = new Gallery(ensureElement<HTMLElement>('.page__wrapper'), events);
 
-const header = new Header(
-    document.querySelector('.header')!, events);
-const gallery = new Gallery(
-    ensureElement<HTMLElement>('.page__wrapper'),
-    events);
-// const modal = new Modal(
+await api.getCatalog()
+    .then(catalog => catalog.items.map(product => (
+        { ...product, image: `${CDN_URL}/${product.image}`.replace('svg', 'png') }
+    )))
+    .then(productsWithImages => {
+        products.saveProducts(productsWithImages);
+    })
+    .catch(error => console.error('Ошибка загрузки каталога', error));
+
+const productsTest = products.getProducts();
+
+const cardCatalogTemplate = ensureElement<HTMLTemplateElement>('#card-catalog');
+
+productsTest.forEach(product => {
+    // Создаём компонент
+    const card = new CardCatalog(cloneTemplate(cardCatalogTemplate), events);
+    gallery.galleryElement.appendChild(card.render(product));
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// const modalT = new Modal(
 //     document.querySelector('.modal') as HTMLElement,
 //     events
 // );
@@ -51,7 +93,6 @@ const gallery = new Gallery(
 //         onOrdered: () => console.log('Заказ закрыт')
 //     }
 // );
-const cardCatalogTemplate = ensureElement<HTMLTemplateElement>('#card-catalog');
 const cardPreviewTemplate = ensureElement<HTMLTemplateElement>('#card-preview');
 // const basketTemplate = ensureElement<HTMLTemplateElement>('#basket');
 const cardBasketTemplate = ensureElement<HTMLTemplateElement>('#card-basket');
@@ -60,7 +101,6 @@ const formContactsTemplate = ensureElement<HTMLTemplateElement>('#contacts');
 const successTemplate = ensureElement<HTMLTemplateElement>('#success');
 const modalContainer = ensureElement<HTMLDivElement>('#modal-container');
 const modal = new Modal(modalContainer, events);
-
 
 
 const cardPreview = new CardPreview(
@@ -240,7 +280,12 @@ api.getCatalog()
     .catch(error => console.error('Ошибка загрузки каталога', error));
 
 
-
+// создаём экземпляр Api, который реализует IApi
+// // const api = new Api(API_URL);
+// const shopApi = new ShopApi(api);
+// const catalogModel = new ProductModel(); // Создаём новый экземпляр
+// const events = new EventEmitter();
+// const api = new AppApi(API_URL);
 
 
 

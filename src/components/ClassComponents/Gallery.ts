@@ -8,8 +8,8 @@ interface IGallery {
 
 export class Gallery extends Component<IGallery> {
     galleryElement: HTMLElement;
-    
- constructor(container: HTMLElement, events: IEvents) {
+
+    constructor(container: HTMLElement, events: IEvents) {
         super(container, events);
         this.galleryElement = ensureElement<HTMLElement>('.gallery', this.container);
     }
