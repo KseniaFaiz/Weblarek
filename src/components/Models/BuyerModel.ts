@@ -42,38 +42,27 @@ export class BuyerModel {
     }
 
     validate(): { [key: string]: string } {
-        const errors: { address?: string, payment?: string } = {}
+        const errors: { address?: string, payment?: string, email?: string, phone?: string } = {}
 
         if (!this.payment) {
             errors.payment = 'Выберите способ оплаты';
-        } else
-            if (!this.address || this.address.trim() === '') {
-                errors.address = 'Необходимо указать адрес';
-            }
+        } else if (!this.address || this.address.trim() === '') {
+            errors.address = 'Необходимо указать адрес';
+        }
+
         return errors;
 
+    }
 
+    validateContacts(): { [key: string]: string } {
+        const errors: { address?: string, payment?: string, email?: string, phone?: string } = {}
+        if (!this.email) {
+            errors.email = 'Укажите Email';
+        } else if (!this.phone) {
+            errors.phone = 'Укажите номер телефона';
+        }
 
-        // IBuyerValidationErrors {
-        //     const errors: IBuyerValidationErrors = {};
+        return errors;
 
-        //     if (!this.payment) {
-        //         errors.payment = 'Выберите оплаты';
-        //     }
-
-        //     if (!this.email) {
-        //         errors.email = 'Укажите Email';
-        //     }
-
-        //     if (!this.phone) {
-        //         errors.phone = 'Укажите номер телефона';
-        //     }
-
-        //     if (!this.address) {
-        //         errors.address = 'Укажите адрес доставки';
-        //     }
-
-        //     return errors;
-        // }
     }
 }

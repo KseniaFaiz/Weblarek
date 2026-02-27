@@ -128,13 +128,6 @@ events.on('basket:render', () => {
 
 events.on('cart:order', () => {
     events.emit('order-form:open')
-    // const orderForm = new FormOrder(cloneTemplate(formOrderTemplate), events);
-
-
-    // modal.content = orderForm.render()
-
-
-    // modal.open();
 });
 
 events.on('order-form:open', () => {
@@ -156,6 +149,31 @@ events.on('order-form:open', () => {
 events.on('buyer:change', (buyerData: IBuyer) => {
     buyer.saveData(buyerData)
     events.emit('order-form:open')
+});
+
+events.on('order:submit', () => {
+    events.emit('contacts-form:open')
+});
+
+events.on('contacts-form:open', () => {
+    const buyerData = buyer.getData();
+    console.log('bayer', buyerData)
+    const contactsForm = new FormContacts(cloneTemplate(formContactsTemplate), events);
+    contactsForm.email = buyerData?.email
+    contactsForm.phone = buyerData?.phone
+
+    const errors = buyer.validateContacts();
+    contactsForm.checkErrors(errors);
+
+    modal.content = contactsForm.render()
+
+
+    modal.open();
+});
+
+events.on('buyer:change-contacts', (buyerData: IBuyer) => {
+    buyer.saveData(buyerData)
+    events.emit('contacts-form:open')
 });
 
 
@@ -234,10 +252,7 @@ events.on('cart:open', () => {
 
 
 
-events.on('order:submit', () => {
-    modal.render({ content: contactsForm.render() });
-    modal.open();
-});
+
 
 events.on('cart:contacts', () => {
     const buyerData = buyer.getData();
