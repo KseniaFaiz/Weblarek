@@ -1,5 +1,6 @@
 import { ensureElement } from "../../utils/utils";
 import { Component } from "../base/Component";
+import { IEvents } from "../base/Events";
 
 export interface ISuccess {
     successElement: HTMLElement;
@@ -7,14 +8,17 @@ export interface ISuccess {
     successDescription: HTMLElement;
 }
 
+export interface ISuccessActions {
+    onOrdered?: () => void;
+}
 
 export class Success extends Component<ISuccess> {
     successElement: HTMLElement;
     successButtonClose: HTMLButtonElement;
     successDescription: HTMLElement;
 
-    constructor(container: HTMLElement) {
-        super(container);
+   constructor(container: HTMLElement, events: IEvents, actions?: ISuccessActions) {
+        super(container, events);
         this.successElement = ensureElement<HTMLElement>(
             '.order-success',
             this.container
@@ -28,26 +32,9 @@ export class Success extends Component<ISuccess> {
             '.order-order-success__description',
             this.container
         );
+        if (actions?.onOrdered) {
+            this.successButtonClose.addEventListener('click', actions.onOrdered);
+        }
     }
 
-
-    // Method to set the success message description
-    set successDescriptionText(value: number) {
-        this.successDescription.textContent = `Списано ${value} синапсов`; // Sets the description text with the amount
-    }
-
-    // Method to configure the close button behavior
-    initializeCloseButton(handler: () => void) {
-        this.successButtonClose.addEventListener('click', handler); // Attach event handler for button click
-    }
-
-    // Optional: Method to display the success message
-    show() {
-        this.successElement.style.display = 'block'; // Make the success element visible
-    }
-
-    // Optional: Method to hide the success message
-    hide() {
-        this.successElement.style.display = 'none'; // Hide the success element
-    }
 }

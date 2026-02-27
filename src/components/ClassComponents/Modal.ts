@@ -1,20 +1,22 @@
-import { ensureElement } from "../../utils/utils";
-import { Component } from "../base/Component";
+import { Component } from '../base/Component';
+import { ensureElement } from '../../utils/utils';
+import { IEvents } from '../base/Events';
 
-
-export interface IModal {
-    modalElement: HTMLElement;
-    modalButtonClose: HTMLButtonElement;
+interface IModal {
+    content: HTMLElement;
+    buttonClose: HTMLButtonElement;
 }
 
 export class Modal extends Component<IModal> {
-    modalElement: HTMLElement;
-    modalButtonClose: HTMLButtonElement;
+    private modalContent: HTMLElement;
+    private modalButtonClose: HTMLButtonElement;
+    isOpen: boolean = false;
 
-    constructor(container: HTMLElement) {
-        super(container);
-        this.modalElement = ensureElement<HTMLElement>(
-            '.modal',
+    constructor(container: HTMLElement, events: IEvents)  {
+        super(container, events); 
+
+        this.modalContent = ensureElement<HTMLElement>(
+            '.modal__content',
             this.container
         );
 
@@ -22,30 +24,43 @@ export class Modal extends Component<IModal> {
             '.modal__close',
             this.container
         );
-    }
 
-
-    // Method to set content inside the modal
-    set modalContent(items: HTMLElement[]) {
-        const contentContainer = ensureElement<HTMLElement>('.modal__content', this.modalElement);
-        contentContainer.innerHTML = ''; // Clear existing content
-        items.forEach(item => {
-            contentContainer.appendChild(item); // Append new items
+        this.modalButtonClose.addEventListener('click', () => {
+            this.close();
         });
     }
 
-    // Method to show the modal
-    show() {
-        this.modalElement.style.display = 'block'; // Display the modal
+    protected handleKeyDown = (event: KeyboardEvent) => {
+        if (event.key === 'Escape' || event.key === 'Enter') {
+            this.close();
+        }
+    };
+
+    set content(elem: HTMLElement) {
+        this.modalContent.replaceChildren(elem);
     }
 
-    // Method to hide the modal
-    hide() {
-        this.modalElement.style.display = 'none'; // Hide the modal
+    open(): void {
+        this.container.classList.add('page__wrapper_locked');
+        this.container.classList.add('modal_active');
+        this.isOpen = true;
+
+        document.addEventListener('keydown', this.handleKeyDown);
+
+        this.events.emit('modal:open');
     }
 
-    // Method to initialize the close button functionality
-    initializeCloseButton(handler: () => void) {
-        this.modalButtonClose.addEventListener('click', handler); // Attach event handler
+    close(): void {
+        if (!this.isOpen) {
+            return;
+        }
+
+        this.container.classList.remove('page__wrapper_locked');
+        this.container.classList.remove('modal_active');
+        this.isOpen = false;
+
+        document.removeEventListener('keydown', this.handleKeyDown);
+
+        this.events.emit('modal:close');
     }
-}
+    };

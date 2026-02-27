@@ -9,9 +9,12 @@ interface IHeader {
 export class Header extends Component<IHeader> {
     protected basketCounterElement: HTMLElement;
     protected basketButton: HTMLButtonElement;
+    protected events: IEvents;
 
-    constructor(protected events: IEvents, container: HTMLElement) {
-        super(container);
+
+    constructor(container: HTMLElement, events: IEvents) {
+        super(container, events);
+        this.events = events;
         this.basketCounterElement = ensureElement<HTMLElement>(
             '.header__basket-counter',
             this.container

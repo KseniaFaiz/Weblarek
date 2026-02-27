@@ -1,14 +1,16 @@
-import { ensureElement } from "../../utils/utils";
-import { Component } from "../base/Component";
+import { ensureElement } from "../../../utils/utils";
+import { Component } from "../../base/Component";
 
-interface ICard {
+export interface ICard {
     title: string;
     price: number;
+    id?: string;
 }
 
-export class Card extends Component<ICard> {
+export class Card<T extends ICard> extends Component<T> {
     protected titleElement: HTMLElement;
     protected priceElement: HTMLElement;
+    protected id?: string;
 
     constructor(container: HTMLElement) {
         super(container);
@@ -26,10 +28,13 @@ export class Card extends Component<ICard> {
     set title(value: string) {
         this.titleElement.textContent = String(value);
     }
-    set price(value: number) {
-        this.priceElement.textContent = String(value);
+    set price(value: number | null) {
+        const textContent = value ? `${value} синапсов` : 'Бесценно';
+        this.priceElement.textContent = textContent;
     }
+
 }
+
 
 
 

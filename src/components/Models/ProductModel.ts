@@ -1,10 +1,10 @@
 import { IProduct } from '../../types';
-
+import { IEvents } from "../base/Events";
 export class ProductModel {
     private products: IProduct[] = [];
     private selectedProduct: IProduct | null = null;
 
-    constructor() {
+    constructor(protected events: IEvents) {
     }
 
     saveProducts(products: IProduct[]): void {
@@ -25,5 +25,9 @@ export class ProductModel {
 
     getSelectedProduct(): IProduct | null {
         return this.selectedProduct;
+    }
+    setSelectedProduct(id: string) {
+        const product = this.products.find(p => p.id === id) || null;
+        this.selectedProduct = product;
     }
 }

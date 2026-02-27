@@ -1,65 +1,104 @@
-import { ensureElement } from "../../utils/utils";
-import { Component } from "../base/Component";
 
+import { Component } from '../base/Component';
+import { ensureElement } from '../../utils/utils';
+import { IEvents } from '../base/Events';
 
-export interface IBasket {
-  list: HTMLElement;
-  price: HTMLElement;
-  button: HTMLButtonElement;
+interface BasketData {
+  products: HTMLElement[];
+  total: number;
 }
 
-export class Basket extends Component<IBasket> {
-  protected basketList: HTMLElement;
-  protected basketPrice: HTMLElement;
-  protected basketButton: HTMLButtonElement;
+export class Basket extends Component<BasketData> {
+  protected titleElement: HTMLElement;
+  protected listElement: HTMLElement;
+  protected buttonElement: HTMLButtonElement;
+  protected priceElement: HTMLElement;
 
-  constructor(container: HTMLElement) {
-    super(container);
-    this.basketList = ensureElement<HTMLElement>(
-      '.basket__list',
-      this.container
-    );
+  constructor(container: HTMLElement, events: IEvents) {
+        super(container, events);
 
-    this.basketPrice = ensureElement<HTMLElement>(
-      '.basket__price',
-      this.container
-    );
-    this.basketButton = ensureElement<HTMLButtonElement>(
-      '.basket__button',
-      this.container
-    );
+    this.titleElement = ensureElement<HTMLElement>('.modal__title', this.container);
+    this.listElement = ensureElement<HTMLElement>('.basket__list', this.container);
+    this.buttonElement = ensureElement<HTMLButtonElement>('.basket__button', this.container);
+    this.priceElement = ensureElement<HTMLElement>('.basket__price', this.container);
 
-  }
+    this.basket = [];
 
-    // Sets the items in the basket
-    set list(items: HTMLElement[]) {
-        this.basketList.innerHTML = ''; // Clear existing items
-        items.forEach(item => {
-            this.basketList.appendChild(item); // Append each item to the list
-        });
+    this.buttonElement.addEventListener('click', () => {
+      this.events?.emit('cart:order');
+    });
+  };
+
+  set buttonText(value: string) {
+    this.buttonElement.textContent = String(value);
+  };
+
+  set buttonDisabled(value: boolean) {
+    this.buttonElement.disabled = value;
+  };
+
+  set basket(items: HTMLElement[]) {
+    if (items.length > 0) {
+      this.buttonDisabled = false;
+      this.buttonText = 'Оформить';
+      this.listElement.replaceChildren(...items);
+    } else {
+      const emptyCart = document.createElement('p');
+      emptyCart.textContent = 'Корзина пуста';
+      this.buttonDisabled = true;
+      this.buttonText = 'Оформить';
+      this.listElement.replaceChildren(emptyCart);
     }
+  };
 
-    // Updates the total price displayed in the basket
-    set price(value: number) {
-        this.basketPrice.textContent = `${value} синапсов`; // Update price display
-    }
+  set total(value: number) {
+    this.priceElement.textContent = `${value} синапсов`;
+  };
+};
 
-    // Method to enable the button based on the basket state
-    updateButtonState(isEnabled: boolean) {
-        this.basketButton.disabled = !isEnabled; // Enable or disable button
-    }
 
-    // Optional: Method to clear the basket
-    clearBasket() {
-        this.basketList.innerHTML = ''; // Clear items
-        this.price = 0; // Reset price
-        this.updateButtonState(false); // Disable button
-    }
+// export interface IBasket {
+//   list: HTMLElement;
+//   price: HTMLElement;
+//   button: HTMLButtonElement;
+// }
 
-    // Optional: Method to add an item to the basket
-    addItem(item: HTMLElement) {
-        this.basketList.appendChild(item);
-        this.updateButtonState(true); // Ensure button is enabled
-    }
-}
+// export class Basket extends Component<IBasket> {
+//   protected basketList: HTMLElement;
+//   protected basketPrice: HTMLElement;
+//   protected basketButton: HTMLButtonElement;
+
+//   constructor(container: HTMLElement) {
+//     super(container);
+//     this.basketList = ensureElement<HTMLElement>(
+//       '.basket__list',
+//       this.container
+//     );
+
+//     this.basketPrice = ensureElement<HTMLElement>(
+//       '.basket__price',
+//       this.container
+//     );
+//     this.basketButton = ensureElement<HTMLButtonElement>(
+//       '.basket__button',
+//       this.container
+//     );
+
+//   }
+
+//   set list(items: HTMLElement[]) {
+//     if (items.length === 0) {
+//       this.basketList.textContent = "Корзина пуста";
+//       this.basketList.style.color = "gray";
+//     } else {
+//       this.basketList.innerHTML = "";
+//       items.forEach((item) => this.basketList.appendChild(item));
+//     }
+
+//     this.basketButton.disabled = items.length === 0;
+//   }
+//   set price(value: number) {
+//     this.basketPrice.textContent = `${value} синапсов`;
+//   }
+// }
 

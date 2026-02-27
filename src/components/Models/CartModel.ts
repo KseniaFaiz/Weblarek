@@ -1,9 +1,9 @@
 import { IProduct } from '../../types';
-
+import { IEvents } from "../base/Events";
 export class CartModel {
     private items: IProduct[] = [];
 
-    constructor() {
+    constructor(protected events: IEvents) {
     }
 
     getItems(): IProduct[] {
@@ -34,5 +34,8 @@ export class CartModel {
 
     containsItem(itemId: string): boolean {
         return this.items.some(item => item.id === itemId);
+    }
+    isProductInCart(itemId: string): boolean {
+        return this.containsItem(itemId);
     }
 }

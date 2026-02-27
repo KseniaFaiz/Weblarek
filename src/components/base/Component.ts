@@ -1,11 +1,12 @@
 /**
  * Базовый компонент
  */
+import { IEvents } from "./Events";
 export abstract class Component<T> {
-    protected constructor(protected readonly container: HTMLElement) {
-        // Учитывайте что код в конструкторе исполняется ДО всех объявлений в дочернем классе
-    }
-
+    protected constructor(
+        protected readonly container: HTMLElement,
+        protected readonly events: IEvents
+    ) { }
     // Инструментарий для работы с DOM в дочерних компонентах
 
     // Установить изображение с альтернативным текстом
