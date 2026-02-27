@@ -28,8 +28,7 @@ export class CardCatalog extends Card<TCardCatalog> {
     protected imageElement: HTMLImageElement;
     protected categoryElement: HTMLElement;
 
-    // constructor(container: HTMLElement, actions?: ICardActions) {
-    constructor(container: HTMLElement, events: IEvents) {
+    constructor(container: HTMLElement, protected events: IEvents) {
         super(container, events);
         this.categoryElement = ensureElement<HTMLElement>(
             '.card__category',
@@ -43,9 +42,6 @@ export class CardCatalog extends Card<TCardCatalog> {
         this.container.addEventListener('click', () => {
             this.events.emit('card:select', { id: this.id });
         });
-        // if (actions?.onClick) {
-        //     this.container.addEventListener('click', actions.onClick);
-        // }
     }
 
     render(data: TCardCatalog): HTMLElement {
@@ -68,19 +64,3 @@ export class CardCatalog extends Card<TCardCatalog> {
         this.setImage(this.imageElement, value, this.title);
     };
 };
-
-//     set category(value: string) {
-//         this.categoryElement.textContent = value;
-
-//         for (const key in categoryMap) {
-//             this.categoryElement.classList.toggle(
-//                 categoryMap[key as CategoryKey],
-//                 key === value
-//             );
-//         }
-//     }
-
-//     set image(value: string) {
-//         this.setImage(this.imageElement, value, this.title);
-//     }
-// }

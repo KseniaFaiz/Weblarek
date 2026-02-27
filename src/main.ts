@@ -54,37 +54,47 @@ productsTest.forEach(product => {
     gallery.galleryElement.appendChild(card.render(product));
 })
 
+const cardPreviewTemplate = ensureElement<HTMLTemplateElement>('#card-preview');
+const basketTemplate = ensureElement<HTMLTemplateElement>('#basket');
+const cardBasketTemplate = ensureElement<HTMLTemplateElement>('#card-basket');
+const formOrderTemplate = ensureElement<HTMLTemplateElement>('#order');
+const formContactsTemplate = ensureElement<HTMLTemplateElement>('#contacts');
+const successTemplate = ensureElement<HTMLTemplateElement>('#success');
+
+const modalContainer = ensureElement<HTMLDivElement>('#modal-container');
+const modal = new Modal(modalContainer, events);
 
 
 
 
+events.on('card:select', (event: { id: string }) => {
+    products.setSelectedProduct(event.id);
+    const cardPreview = new CardPreview(cloneTemplate(cardPreviewTemplate), events);
+    modal.content = cardPreview.render(products.getSelectedProduct())
+    modal.open()
+});
+
+events.on('basket:open', () => {
+    const basket = new Basket(
+        cloneTemplate<HTMLElement>(basketTemplate),
+        events);
+    modal.content = basket.render()
+    modal.open();
+});
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// const modalT = new Modal(
-//     document.querySelector('.modal') as HTMLElement,
-//     events
+// const orderForm = new FormOrder(cloneTemplate(formOrderTemplate), events);
+// const contactsForm = new FormContacts(cloneTemplate(formContactsTemplate), events);
+// const successView = new Success(cloneTemplate(successTemplate),
+//     events,
+//     {
+//         onOrdered: () => {
+//             modal.close();
+//         }
+//     },
 // );
-
 
 // const success = new Success(
 //     document.querySelector('.order-success') as HTMLElement,
@@ -93,35 +103,10 @@ productsTest.forEach(product => {
 //         onOrdered: () => console.log('Заказ закрыт')
 //     }
 // );
-const cardPreviewTemplate = ensureElement<HTMLTemplateElement>('#card-preview');
-// const basketTemplate = ensureElement<HTMLTemplateElement>('#basket');
-const cardBasketTemplate = ensureElement<HTMLTemplateElement>('#card-basket');
-const formOrderTemplate = ensureElement<HTMLTemplateElement>('#order');
-const formContactsTemplate = ensureElement<HTMLTemplateElement>('#contacts');
-const successTemplate = ensureElement<HTMLTemplateElement>('#success');
-const modalContainer = ensureElement<HTMLDivElement>('#modal-container');
-const modal = new Modal(modalContainer, events);
 
 
-const cardPreview = new CardPreview(
-    cloneTemplate(cardPreviewTemplate), events);
-const basket = new Basket(
-    cloneTemplate<HTMLElement>(cardBasketTemplate),
-    events)
 
-const orderForm = new FormOrder(
-    cloneTemplate(formOrderTemplate), events);
-const contactsForm = new FormContacts(
-    cloneTemplate(formContactsTemplate), events);
-const successView = new Success(
-    cloneTemplate(successTemplate),
-    events,
-    {
-        onOrdered: () => {
-            modal.close();
-        }
-    }
-);
+
 
 
 
@@ -134,9 +119,7 @@ events.on('catalog:changed', () => {
 });
 
 
-events.on('card:select', (event: { id: string }) => {
-    products.setSelectedProduct(event.id);
-});
+
 
 events.on('product:changed', (event: { id: string }) => {
     const product = products.getProductById(event.id);
@@ -270,14 +253,14 @@ events.on('cart:success', (result: { total: number }) => {
     cleanupAfterSuccess();
 });
 
-api.getCatalog()
-    .then(catalog => catalog.items.map(product => (
-        { ...product, image: `${CDN_URL}/${product.image}`.replace('svg', 'png') }
-    )))
-    .then(productsWithImages => {
-        products.saveProducts(productsWithImages);
-    })
-    .catch(error => console.error('Ошибка загрузки каталога', error));
+// api.getCatalog()
+//     .then(catalog => catalog.items.map(product => (
+//         { ...product, image: `${CDN_URL}/${product.image}`.replace('svg', 'png') }
+//     )))
+//     .then(productsWithImages => {
+//         products.saveProducts(productsWithImages);
+//     })
+//     .catch(error => console.error('Ошибка загрузки каталога', error));
 
 
 // создаём экземпляр Api, который реализует IApi
