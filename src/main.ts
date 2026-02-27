@@ -79,6 +79,15 @@ events.on('basket:open', () => {
     const basket = new Basket(
         cloneTemplate<HTMLElement>(basketTemplate),
         events);
+    basket.basket = cart.getItems().map((item, index) => {
+        const cardBasket = new CardBasket(cloneTemplate(cardBasketTemplate), events);
+        cardBasket.index = index + 1
+        cardBasket.title = item.title
+        cardBasket.price = item.price
+        cardBasket.id = item.id
+        return cardBasket.render(item)
+    });
+
     modal.content = basket.render()
     modal.open();
 });

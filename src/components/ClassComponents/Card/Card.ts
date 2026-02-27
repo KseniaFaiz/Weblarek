@@ -10,7 +10,7 @@ export interface ICard {
 export class Card<T extends ICard> extends Component<T> {
     protected titleElement: HTMLElement;
     protected priceElement: HTMLElement;
-    protected id?: string;
+    public id?: string;
 
     constructor(container: HTMLElement, events: IEvents) {
         super(container, events);
@@ -32,6 +32,7 @@ export class Card<T extends ICard> extends Component<T> {
         const textContent = value ? `${value} синапсов` : 'Бесценно';
         this.priceElement.textContent = textContent;
     }
+
 
 }
 
