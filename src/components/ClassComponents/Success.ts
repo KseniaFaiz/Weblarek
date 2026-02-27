@@ -13,24 +13,25 @@ export interface ISuccessActions {
 }
 
 export class Success extends Component<ISuccess> {
-    successElement: HTMLElement;
+    // successElement: HTMLElement;
     successButtonClose: HTMLButtonElement;
     successDescription: HTMLElement;
     total: number = 0;
 
     constructor(container: HTMLElement, events: IEvents, actions?: ISuccessActions) {
         super(container, events);
-        this.successElement = ensureElement<HTMLElement>(
-            '.order-success',
-            this.container
-        );
+        console.log('cont',container)
+        // this.successElement = ensureElement<HTMLElement>(
+        //     '.order-success',
+        //     this.container
+        // );
 
         this.successButtonClose = ensureElement<HTMLButtonElement>(
             '.order-success__close',
             this.container
         );
         this.successDescription = ensureElement<HTMLElement>(
-            '.order-order-success__description',
+            '.order-success__description',
             this.container
         );
         if (actions?.onOrdered) {

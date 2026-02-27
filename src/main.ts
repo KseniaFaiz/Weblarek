@@ -176,95 +176,6 @@ events.on('buyer:change-contacts', (buyerData: IBuyer) => {
     events.emit('contacts-form:open')
 });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-// const contactsForm = new FormContacts(cloneTemplate(formContactsTemplate), events);
-// const successView = new Success(cloneTemplate(successTemplate),
-//     events,
-//     {
-//         onOrdered: () => {
-//             modal.close();
-//         }
-//     },
-// );
-
-// const success = new Success(
-//     document.querySelector('.order-success') as HTMLElement,
-//     events,
-//     {
-//         onOrdered: () => console.log('Заказ закрыт')
-//     }
-// );
-
-
-
-
-
-
-
-events.on('catalog:changed', () => {
-    const itemCards = products.getProducts().map((item) => {
-        const card = new CardCatalog(cloneTemplate(cardCatalogTemplate), events);
-        return card.render(item);
-    });
-    gallery.render({ catalog: itemCards });
-});
-
-
-
-
-events.on('product:changed', (event: { id: string }) => {
-    const product = products.getProductById(event.id);
-    if (!product) {
-        return;
-    }
-
-    const productInCart = cart.isProductInCart(event.id);
-
-    modal.render({
-        content: cardPreview.render(product, productInCart),
-    });
-    modal.open();
-});
-
-
-
-
-
-
-
-events.on('cart:open', () => {
-    modal.render({ content: basket.render() });
-    modal.open();
-});
-
-
-
-
-
-
-events.on('cart:contacts', () => {
-    const buyerData = buyer.getData();
-
-    contactsForm.email = buyerData?.email ?? '';
-    contactsForm.phone = buyerData?.phone ?? '';
-    contactsForm.isContactsValid(buyer.validate());
-
-    modal.render({ content: contactsForm.render() });
-    modal.open();
-});
-
 events.on('contacts:submit', async () => {
     const buyerData = buyer.getData();
 
@@ -289,20 +200,34 @@ events.on('contacts:submit', async () => {
     }
 });
 
-function cleanupAfterSuccess() {
+events.on('cart:success', (result: { total: number }) => {
+    console.log('succ',result)
+    const success = new Success(cloneTemplate(successTemplate),
+        events,
+        {
+            onOrdered: () => {
+                modal.close();
+            }
+        },
+    );
+    success.total = result.total;
+
+    modal.content = success.render()
+    modal.open();
+
+    reset();
+});
+
+function reset() {
     cart.clear();
     header.counter = cart.getTotalCartProducts();
     buyer.clear();
 }
 
-events.on('cart:success', (result: { total: number }) => {
-    successView.total = result.total;
 
-    modal.render({ content: successView.render() });
-    modal.open();
 
-    cleanupAfterSuccess();
-});
+
+
 
 // api.getCatalog()
 //     .then(catalog => catalog.items.map(product => (
