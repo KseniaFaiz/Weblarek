@@ -103,7 +103,7 @@ events.on('card:add-product', (event: { id: string }) => {
     events.emit('cart:changed')
 });
 
-events.on('card:remove-product', (event: { id: string }) => {
+events.on('card:remove-product', (event: { id: string, fromCart: boolean }) => {
     const product = products.getProductById(event.id);
     if (!product) {
         return;
@@ -111,12 +111,19 @@ events.on('card:remove-product', (event: { id: string }) => {
 
     cart.removeItem(product.id);
     events.emit('cart:changed')
+    if (event.fromCart) {
+        events.emit('basket:open')
+    }
+
 });
 
 events.on('cart:changed', () => {
     header.counter = cart.getItemsCount();
 });
 
+events.on('basket:render', () => {
+    header.counter = cart.getItemsCount();
+});
 
 
 

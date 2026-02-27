@@ -23,7 +23,7 @@ export class CardBasket extends Card<any> {
             this.container
         );
         this.buttonElement.addEventListener('click', () => {
-            this.events?.emit('card:remove-product', { id: this.id });
+            this.events.emit('card:remove-product', { id: this.id , fromCart: true});
             // this.events?.emit('cart:open');
         });
         // this.buttonElement.addEventListener('click', () => {
