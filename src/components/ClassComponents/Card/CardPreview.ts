@@ -29,14 +29,14 @@ export class CardPreview extends Card<ICard> {
             '.card__button',
             this.container);
 
+
         this.buttonElement.addEventListener('click', () => {
             if (!this.id) return;
-
+            const eventInBasket = this.inBasket ? 'card:remove-product' : 'card:add-product';
+            this.events.emit(eventInBasket, { id: this.id });
             this.inBasket = !this.inBasket;
             this.buttonElement.textContent = this.inBasket ? 'Удалить из корзины' : 'Купить';
 
-            const eventInBasket = this.inBasket ? 'card:add-product' : 'card:remove-product';
-            this.events.emit(eventInBasket, { id: this.id });
         });
     }
 
@@ -56,7 +56,7 @@ export class CardPreview extends Card<ICard> {
             this.buttonElement.disabled = false;
             this.buttonElement.textContent = this.inBasket ? 'Удалить из корзины' : 'Купить';
         }
-
+console.log('incart',inCart)
         return super.render(data);
     }
 

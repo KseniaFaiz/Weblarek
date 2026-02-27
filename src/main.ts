@@ -71,6 +71,7 @@ events.on('card:select', (event: { id: string }) => {
     products.setSelectedProduct(event.id);
     const cardPreview = new CardPreview(cloneTemplate(cardPreviewTemplate), events);
     const inBasket = cart.containsItem(event.id)
+    console.log( 'inbasket',inBasket)
     modal.content = cardPreview.render(products.getSelectedProduct(), inBasket)
     modal.open()
 });
@@ -92,6 +93,18 @@ events.on('card:add-product', (event: { id: string }) => {
         cart.addItem(product);
     console.log('cart', cart.getItemsCount())
 });
+
+events.on('card:remove-product', (event: { id: string }) => {
+    const product = products.getProductById(event.id);
+    if (!product) {
+        return;
+    }
+
+    cart.removeItem(product.id);
+});
+
+
+
 
 
 // const orderForm = new FormOrder(cloneTemplate(formOrderTemplate), events);
@@ -146,14 +159,7 @@ events.on('product:changed', (event: { id: string }) => {
 
 
 
-events.on('card:remove-product', (event: { id: string }) => {
-    const product = products.getProductById(event.id);
-    if (!product) {
-        return;
-    }
 
-    cart.removeItem(product.id);
-});
 
 events.on('basket:change', () => {
     const basketList = cart.getItems();
