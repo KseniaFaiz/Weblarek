@@ -67,12 +67,25 @@ const modal = new Modal(modalContainer, events);
 
 
 
+// events.on('card:select', (event: { id: string }) => {
+//     products.setSelectedProduct(event.id);
+//     const cardPreview = new CardPreview(cloneTemplate(cardPreviewTemplate), events);
+//     const inBasket = cart.containsItem(event.id)
+//     modal.content = cardPreview.render(products.getSelectedProduct(), inBasket)
+//     modal.open()
+// });
+
 events.on('card:select', (event: { id: string }) => {
     products.setSelectedProduct(event.id);
+
+    const selectedProduct = products.getSelectedProduct();
+    if (!selectedProduct) return;
+
     const cardPreview = new CardPreview(cloneTemplate(cardPreviewTemplate), events);
-    const inBasket = cart.containsItem(event.id)
-    modal.content = cardPreview.render(products.getSelectedProduct(), inBasket)
-    modal.open()
+    const inBasket = cart.containsItem(event.id);
+
+    modal.content = cardPreview.render(selectedProduct, inBasket);
+    modal.open();
 });
 
 events.on('basket:open', () => {
@@ -132,9 +145,14 @@ events.on('cart:order', () => {
 
 events.on('order-form:open', () => {
     const buyerData = buyer.getData();
-    console.log('bayer', buyerData)
+    // console.log('bayer', buyerData)
     const orderForm = new FormOrder(cloneTemplate(formOrderTemplate), events);
-    orderForm.payment = buyerData?.payment ;
+    // orderForm.payment = buyerData?.payment;
+
+    if (buyerData?.payment) {
+        orderForm.payment = buyerData.payment;
+    }
+
     orderForm.address = buyerData?.address ?? '';
 
     const errors = buyer.validate();
@@ -157,7 +175,7 @@ events.on('order:submit', () => {
 
 events.on('contacts-form:open', () => {
     const buyerData = buyer.getData();
-    console.log('bayer', buyerData)
+    // console.log('bayer', buyerData)
     const contactsForm = new FormContacts(cloneTemplate(formContactsTemplate), events);
     contactsForm.email = buyerData?.email
     contactsForm.phone = buyerData?.phone
@@ -201,7 +219,7 @@ events.on('contacts:submit', async () => {
 });
 
 events.on('cart:success', (result: { total: number }) => {
-    console.log('succ',result)
+    // console.log('succ', result)
     const success = new Success(cloneTemplate(successTemplate),
         events,
         {

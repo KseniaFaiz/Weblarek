@@ -20,7 +20,7 @@ export class Success extends Component<ISuccess> {
 
     constructor(container: HTMLElement, events: IEvents, actions?: ISuccessActions) {
         super(container, events);
-        console.log('cont',container)
+        // console.log('cont',container)
         // this.successElement = ensureElement<HTMLElement>(
         //     '.order-success',
         //     this.container

@@ -56,7 +56,7 @@ export class CardPreview extends Card<ICard> {
             this.buttonElement.disabled = false;
             this.buttonElement.textContent = this.inBasket ? 'Удалить из корзины' : 'Купить';
         }
-console.log('incart',inCart)
+// console.log('incart',inCart)
         return super.render(data);
     }
 
