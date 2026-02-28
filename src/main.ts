@@ -1,14 +1,10 @@
 import './scss/styles.scss';
-import { Api } from './components/base/Api.ts';
-import { ShopApi } from './components/Api/ShopApi.ts';
 import { BuyerModel } from './components/Models/BuyerModel.ts';
-import { apiProducts } from './utils/data';
 import { CartModel } from './components/Models/CartModel.ts';
 import { ProductModel } from './components/Models/ProductModel.ts';
 import { EventEmitter } from './components/base/Events';
 import { ensureElement, cloneTemplate } from './utils/utils';
 import { Gallery } from './components/ClassComponents/Gallery.ts';
-// import { Card } from './components/ClassComponents/Card/Card.ts';
 import { Header } from './components/ClassComponents/Header.ts';
 import { CardCatalog } from './components/ClassComponents/Card/CardCatalog.ts';
 import { AppApi } from './components/ClassComponents/AppApi.ts';
@@ -18,11 +14,9 @@ import { Modal } from './components/ClassComponents/Modal.ts';
 import { Basket } from './components/ClassComponents/Basket.ts';
 import { CardBasket } from './components/ClassComponents/Card/CardBasket.ts';
 import { IProductsResponse, IBuyer } from './types';
-// import { Form } from './components/ClassComponents/Form/Form.ts';
 import { FormOrder } from './components/ClassComponents/Form/FormOrder.ts';
 import { FormContacts } from './components/ClassComponents/Form/FormContact.ts';
 import { Success } from './components/ClassComponents/Success.ts';
-import { Payment } from './types';
 
 
 const events = new EventEmitter();
@@ -65,15 +59,6 @@ const modalContainer = ensureElement<HTMLDivElement>('#modal-container');
 const modal = new Modal(modalContainer, events);
 
 
-
-
-// events.on('card:select', (event: { id: string }) => {
-//     products.setSelectedProduct(event.id);
-//     const cardPreview = new CardPreview(cloneTemplate(cardPreviewTemplate), events);
-//     const inBasket = cart.containsItem(event.id)
-//     modal.content = cardPreview.render(products.getSelectedProduct(), inBasket)
-//     modal.open()
-// });
 
 events.on('card:select', (event: { id: string }) => {
     products.setSelectedProduct(event.id);
@@ -147,7 +132,6 @@ events.on('order-form:open', () => {
     const buyerData = buyer.getData();
     // console.log('bayer', buyerData)
     const orderForm = new FormOrder(cloneTemplate(formOrderTemplate), events);
-    // orderForm.payment = buyerData?.payment;
 
     if (buyerData?.payment) {
         orderForm.payment = buyerData.payment;
@@ -219,7 +203,6 @@ events.on('contacts:submit', async () => {
 });
 
 events.on('cart:success', (result: { total: number }) => {
-    // console.log('succ', result)
     const success = new Success(cloneTemplate(successTemplate),
         events,
         {
@@ -242,98 +225,3 @@ function reset() {
     buyer.clear();
 }
 
-
-
-
-
-
-// api.getCatalog()
-//     .then(catalog => catalog.items.map(product => (
-//         { ...product, image: `${CDN_URL}/${product.image}`.replace('svg', 'png') }
-//     )))
-//     .then(productsWithImages => {
-//         products.saveProducts(productsWithImages);
-//     })
-//     .catch(error => console.error('Ошибка загрузки каталога', error));
-
-
-// создаём экземпляр Api, который реализует IApi
-// // const api = new Api(API_URL);
-// const shopApi = new ShopApi(api);
-// const catalogModel = new ProductModel(); // Создаём новый экземпляр
-// const events = new EventEmitter();
-// const api = new AppApi(API_URL);
-
-
-
-//     // Обновляем форму заказа (шаг 1)
-//     orderForm.address = buyerData?.address ?? '';
-//     orderForm.payment = buyerData?.payment ?? 'card';
-//     orderForm.isAddressValid(buyer.sumAddressErrors());
-
-//     // Обновляем форму контактов (шаг 2)
-//     contactsForm.email = buyerData?.email ?? '';
-//     contactsForm.phone = buyerData?.phone ?? '';
-//     contactsForm.isContactsValid(buyer.sumContactsErrors());
-// });
-
-// //для проверки класса Product
-
-// const productsModel = new ProductModel();
-// productsModel.saveProducts(apiProducts.items);
-// console.log('Массив товаров из каталога: ', productsModel.getProducts());
-
-// const items = productsModel.getProducts();
-// const item = items[0];
-// console.log('продукт по ID ', productsModel.getProductById(item.id));
-
-// productsModel.saveSelectedProduct(item)
-// console.log('Выбранный продукт ', productsModel.getSelectedProduct());
-
-
-// //для проверки класса Buyer
-
-// const buyerModel = new BuyerModel();
-
-// buyerModel.saveData({
-//     email: 'test@test.com',
-//     phone: '+79131111111',
-//     address: 'Бердск, ул. Первая, д. 1',
-//     payment: 'card'
-// });
-
-// console.log('Данные после сохранения:', buyerModel.getData());
-
-// const validationResult = buyerModel.validate();
-// console.log('Проверены все поля?', Object.keys(validationResult).length === 0);
-
-// buyerModel.clear();
-// console.log('Данные после очистки:', buyerModel.getData());
-
-
-// // для проверки класса CartModels
-// const cart = new CartModel();
-// cart.addItem(item);
-// const anotherItem = items[1];
-// cart.addItem(anotherItem);
-// console.log('Продукты в корзине ', cart.getItems());
-
-// console.log('Общая стоимость ', cart.getTotalAmount());
-// console.log('Количество товаров ', cart.getItemsCount());
-// console.log('Есть ли продукт в корзине ', cart.containsItem(item.id));
-
-// cart.removeItem(item.id);
-// console.log('Есть ли продукт в корзине ', cart.containsItem(item.id));
-// console.log('Продукты в корзине ', cart.getItems());
-
-// cart.clear();
-// console.log('Корзина пуста', cart.getItems());
-
-//для проверки Api
-
-// создаём экземпляр Api, который реализует IApi
-// // const api = new Api(API_URL);
-// const shopApi = new ShopApi(api);
-// const catalogModel = new ProductModel(); // Создаём новый экземпляр
-// const events = new EventEmitter();
-// const api = new AppApi(API_URL);

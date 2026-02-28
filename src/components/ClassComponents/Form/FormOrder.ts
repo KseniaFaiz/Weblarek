@@ -27,7 +27,6 @@ export class FormOrder extends Form {
             this.container);
 
         this.container.addEventListener('submit', (event: SubmitEvent) => {
-            // event.preventDefault();
             this.events.emit(this.submitEventName);
         });
 
@@ -67,17 +66,4 @@ get payment(): Payment {
         this.checkErrors(errors || {});
     }
 };
-
-    // set payment(value: TPayment) {
-    //     this.selectPayment(value);
-    // };
-
-    // get payment(): TPayment {
-    //     if (this.payCash.classList.contains('button_alt-active')) {
-    //         return 'cash';
-    //     } else {
-    //         return 'card';
-    //     }
-    // }
-
 
