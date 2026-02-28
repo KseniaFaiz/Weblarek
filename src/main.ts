@@ -136,15 +136,12 @@ events.on('order-form:open', () => {
     if (buyerData?.payment) {
         orderForm.payment = buyerData.payment;
     }
-
     orderForm.address = buyerData?.address ?? '';
 
     const errors = buyer.validate();
     orderForm.checkErrors(errors);
 
     modal.content = orderForm.render()
-
-
     modal.open();
 });
 

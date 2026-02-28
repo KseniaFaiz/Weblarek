@@ -23,12 +23,9 @@ export class CardBasket extends Card<any> {
             this.container
         );
         this.buttonElement.addEventListener('click', () => {
-            this.events.emit('card:remove-product', { id: this.id , fromCart: true});
-            // this.events?.emit('cart:open');
+            this.events.emit('card:remove-product', { id: this.id, fromCart: true });
         });
-        // this.buttonElement.addEventListener('click', () => {
-        //     this.events.emit('card:remove-product', { id: this.id });
-        // })
+
     }
 
     set index(value: number) {
@@ -38,10 +35,6 @@ export class CardBasket extends Card<any> {
         // заполнение шаблона
         return this.container;
     }
-    // render(data: IProduct) {
-    //     this.id = data.id;
-    //     return super.render(data);
-    // }
 
 
 }

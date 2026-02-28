@@ -18,7 +18,6 @@ export interface ICardPreviewElement {
 
 
 type CategoryKey = keyof typeof categoryMap;
-// export type TCardCatalog = Pick<IProduct, 'image' | 'category'>;
 export type TCardCatalog = Pick<
     IProduct,
     'id' | 'title' | 'price' | 'image' | 'category'

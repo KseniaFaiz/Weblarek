@@ -45,18 +45,18 @@ export class FormOrder extends Form {
         });
     };
 
-selectPayment(payment: Payment): void {
-    this.payCard.classList.toggle('button_alt-active', payment === 'card');
-    this.payCash.classList.toggle('button_alt-active', payment === 'cash');
-}
+    selectPayment(payment: Payment): void {
+        this.payCard.classList.toggle('button_alt-active', payment === 'card');
+        this.payCash.classList.toggle('button_alt-active', payment === 'cash');
+    }
 
-set payment(value: Payment) {
-    this.selectPayment(value);
-}
+    set payment(value: Payment) {
+        this.selectPayment(value);
+    }
 
-get payment(): Payment {
-    return this.payCash.classList.contains('button_alt-active') ? 'cash' : 'card';
-}
+    get payment(): Payment {
+        return this.payCash.classList.contains('button_alt-active') ? 'cash' : 'card';
+    }
 
     set address(value: string) {
         this.addressInput.value = value;

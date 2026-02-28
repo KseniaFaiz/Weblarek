@@ -52,34 +52,4 @@ export interface IBuyerValidationErrors {
 }
 
 export type Payment = 'card' | 'cash' | '';
-// export interface TPayment {
-//   payment: Payment;
-// }
 
-
-
-
-
-
-
-
-
-
-
-// events.on('catalog:changed', () => {
-//   const itemCards = productsModel.getItems().map((item) => {
-//     const card = new CardCatalog(cloneTemplate(cardCatalogTemplate), {
-//       onClick: () => events.emit('card:select', item),
-//     });
-//     return card.render(item);
-//   });
-
-//   gallery.render({ catalog: itemCards });
-// });
-
-// larekApi
-//   .getProductList()
-//   .then((data) => {
-//     productsModel.setItems(data.items);
-//   })
-//   .catch((err) => console.error(err));
